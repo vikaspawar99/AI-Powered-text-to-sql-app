@@ -1,3 +1,5 @@
+https://ai-powered-text-to-sql-app-nkvumcrp2tfgaa7qxofjpj.streamlit.app/ 
+
 Turn plain-English questions into SQL queries on your Excel data — instantly.
 Upload any .xlsx file and ask questions like “Sum of Total_Sales by City” to get results in a clean table. Built with Streamlit + Groq LLM.
 
