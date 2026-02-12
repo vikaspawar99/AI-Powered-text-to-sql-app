@@ -13,8 +13,8 @@ st.set_page_config(page_title="AI Text-to-SQL (Live)", layout="centered")
 st.title("AI-Powered Text-to-SQL — Upload Excel")
 st.caption("Upload your Excel file and ask questions in plain English.")
 
-# ------------------ LLM (Groq - Free Tier) ------------------
-llm = ChatGroq(model="llama3-8b-8192", temperature=0)
+# ------------------ LLM (Groq - Supported model) ------------------
+llm = ChatGroq(model="llama-3.1-8b-instant", temperature=0)
 
 # ------------------ File Upload ------------------
 uploaded_file = st.file_uploader("Upload an Excel file (.xlsx)", type=["xlsx"])
@@ -26,8 +26,11 @@ if not uploaded_file:
 # ------------------ Load Excel ------------------
 df = pd.read_excel(uploaded_file)
 
+# ------------------ Preview with user control ------------------
 st.subheader("Preview of uploaded data")
-st.dataframe(df.head(10), use_container_width=True)
+preview_rows = st.selectbox("How many rows to preview?", options=[10, 50, 100], index=0)
+st.dataframe(df.head(preview_rows), use_container_width=True)
+st.caption(f"Showing first {preview_rows} rows out of {len(df)} total rows.")
 
 # ------------------ Save to temp SQLite ------------------
 tmp_db = os.path.join(tempfile.gettempdir(), "user_data.db")
@@ -112,4 +115,4 @@ if question:
 # ------------------ Example Questions ------------------
 with st.expander("Example questions you can try"):
     st.write("- Show first 5 rows from user_data")
-    st.write("- How many rows are in user_data?")
+    st.write("- Sum of Total_Sales by City")
