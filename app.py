@@ -4,7 +4,7 @@ import sqlite3
 import tempfile
 import os
 
-from langchain_openai import ChatOpenAI
+from langchain_groq import ChatGroq
 from langchain_core.prompts import ChatPromptTemplate
 from langchain_core.output_parsers import StrOutputParser
 
@@ -13,8 +13,8 @@ st.set_page_config(page_title="AI Text-to-SQL (Live)", layout="centered")
 st.title("AI-Powered Text-to-SQL — Upload Excel")
 st.caption("Upload your Excel file and ask questions in plain English.")
 
-# ------------------ LLM (OpenAI - Cloud) ------------------
-llm = ChatOpenAI(model="gpt-4o-mini", temperature=0)
+# ------------------ LLM (Groq - Free Tier) ------------------
+llm = ChatGroq(model="llama3-8b-8192", temperature=0)
 
 # ------------------ File Upload ------------------
 uploaded_file = st.file_uploader("Upload an Excel file (.xlsx)", type=["xlsx"])
@@ -83,10 +83,7 @@ question = st.text_input("Ask a question about your uploaded data:")
 if question:
     st.subheader("Generated SQL")
     sql_query = chain.invoke({"schema": schema_text, "question": question}).strip()
-
-    # Clean markdown fences just in case
     sql_query = sql_query.replace("```sql", "").replace("```", "").strip()
-
     st.code(sql_query, language="sql")
 
     # Safety: block destructive SQL
